@@ -33,11 +33,7 @@ toWriteArray = bytearray(~b & 0xFF for b in byteArray)
 
 
 while(True):
-
-    # try: 
-    #     plc.as_write_area(area, 0, startByte, numberOfUnits, word_length, toWriteArray)
-    # except RuntimeError:
-    #     pass
+    
     with suppress(RuntimeError):
         plc.as_write_area(area, 0, startByte, numberOfUnits, word_length, toWriteArray)
 
