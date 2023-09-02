@@ -62,25 +62,25 @@ def readPLCByte():
             readBytes = plc.read_area(area, 0, startByte, numberOfUnits)
             currentByte[0] = readBytes[0]
             currentByte[0] = mask ^ currentByte[0]
-            time.sleep(0.51)  # Sleep for 10ms to prevent overwhelming the PLC or CPU
+            time.sleep(0.3)  
 
 def writeFlippedBit():
     while True:
-        with suppress(RuntimeError):  # Flip the bit and prepare to write
-            
+        with suppress(RuntimeError): 
             plc.as_write_area(area, 0, startByte, numberOfUnits, wordLength, bytearray([currentByte[0]]))
             
-writeThread = threading.Thread(target=writeFlippedBit)
-readThread = threading.Thread(target=readPLCByte)
+if(str(ready) != "y"):
+    sys.exit()
+else:
+    writeThread = threading.Thread(target=writeFlippedBit)
+    readThread = threading.Thread(target=readPLCByte)
 
-writeThread.start()
-readThread.start()
+    writeThread.start()
+    readThread.start()
 
-writeThread.join()
-readThread.join()
+    writeThread.join()
+    readThread.join()
 
-# if(str(ready) != "y"):
-#     sys.exit()
 # else:
 #     while(True):
 #         with suppress(RuntimeError):
