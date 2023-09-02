@@ -62,12 +62,12 @@ def readPLCByte():
             readBytes = plc.read_area(area, 0, startByte, numberOfUnits)
             currentByte[0] = readBytes[0]
             currentByte[0] = mask ^ currentByte[0]
-            time.sleep(0.3)  
+            time.sleep(0.6)  
 
 def writeFlippedBit():
     while True:
         with suppress(RuntimeError): 
-            plc.as_write_area(area, 0, startByte, numberOfUnits, wordLength, bytearray([currentByte[0]]))
+            plc.write_area(area, 0, startByte, bytearray([currentByte[0]]))
             
 if(str(ready) != "y"):
     sys.exit()
