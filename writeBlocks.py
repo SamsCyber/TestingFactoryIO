@@ -3,6 +3,7 @@ import snap7
 from snap7.util import *
 from snap7.types import *
 import struct
+from contextlib import suppress
 
 plc = snap7.client.Client()
 plc.connect("192.168.0.1", 0, 1)
@@ -25,11 +26,15 @@ byteArray = plc.read_area(area, 0, startByte, numberOfUnits)
 toWriteArray = bytearray(~b & 0xFF for b in byteArray)
 
 
+# while(True):
+#     # plc.write_area(area, 0, 0, toWriteArray)
+#     plc.as_write_area(area, 0, startByte, numberOfUnits, word_length, toWriteArray)
+#     time.sleep(0.0045)
+
+
 while(True):
-    # plc.write_area(area, 0, 0, toWriteArray)
-    plc.as_write_area(area, 0, startByte, numberOfUnits, word_length, toWriteArray)
-    time.sleep(0.0045)
-
-
+    
+    with suppress(RuntimeError):
+        plc.as_write_area(area, 0, startByte, numberOfUnits, word_length, toWriteArray)
 
 
