@@ -50,7 +50,7 @@ restingBit, toWriteByte = getAndFlipBit(readBytes[0], whatBit)
 toWriteArray = bytearray([toWriteByte])
 
 print(f"Overall Byte value is: {readBytes[0]}")
-print(f"Byte Value to write Back is {toWriteByte}, {bytearray([toWriteByte])}")
+print(f"Byte Value to write Back if flipping bit is {toWriteByte}, {bytearray([toWriteByte])}")
 print(f"The resting value for your specified byte: {startByte} and specified bit: {whatBit} is bit value: {restingBit}")
 
 ready = input("Have you noted this down and are ready to attack? press y if ready")
